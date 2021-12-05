@@ -1,0 +1,39 @@
+name: Build And Publish Keymaps
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/setup-python@v1
+      - uses: actions/checkout@master
+      - name: Install Dependencies
+        run: git clone https://github.com/qmk/qmk_firmware.git
+      - name: Install QMK Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install gcc unzip wget zip gcc-avr binutils-avr avr-libc dfu-programmer dfu-util gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi
+          sudo apt-get -y install git python3-pip python3-testresources
+      - name: Install QMK
+        run: |
+          python3 -m pip install --user qmk
+          qmk setup --yes
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      - name: Move crkdb keymaps into qmk
+        run: mv $(pwd)/crkbd $HOME/qmk_firmware/keyboards/crkbd/keymaps/
+      - name: Compile crkbd keymaps
+        run: |
+          for dir in $HOME/qmk_firmware/keyboards/crkbd/keymaps/
+          do
+            dir=${dir%*/}
+            echo "${dir##*/}"
+            echo $PWD
+            qmk compile -kb crkbd -km ${dir}
+          done
+          mv $HOME/qmk_firmware/*.hex $(pwd)
+
