@@ -35,5 +35,6 @@ jobs:
             echo $PWD
             qmk compile -kb crkbd -km ${dir}
           done
-          mv $HOME/qmk_firmware/*.hex $(pwd)
+          ls -la
+          mv $HOME/*.hex $(pwd)
 
