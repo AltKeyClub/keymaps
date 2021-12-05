@@ -1,0 +1,3 @@
+[submodule "crkbd/crkbd-qwerty"]
+	path = crkbd/crkbd-qwerty
+	url = https://github.com/AltKeyClub/crkbd-qwerty.git
