@@ -37,11 +37,13 @@ jobs:
           done
       - name: Move keymaps
         run: mv $HOME/qmk_firmware/*.hex $(pwd)
+      - name: Build zip
+        run: |
+          zip --junk-paths hex-ejemplos.zip *.hex
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: $(pwd)/*.hex
+          file: hex-ejemplos.zip
           tag: ${{ github.ref }}
           overwrite: true
-          file_glob: true
