@@ -24,16 +24,12 @@ jobs:
           qmk setup --yes
       - name: Checkout submodules
         run: git submodule update --init --recursive
+      - name: Remove defaukt crkbd keymaps
+        run: rm -rf $HOME/qmk_firmware/keyboards/crkbd/keymaps/*
+      - name: Move crkdb keymaps 
+        run: mv $(pwd)/crkbd/* $HOME/qmk_firmware/keyboards/crkbd/keymaps/
       - name: LS
         run: ls -la $HOME/qmk_firmware/keyboards/crkbd/keymaps/
-      - name: Remove defaukt crkbd keymaps
-        run: rm -rf $HOME/qmk_firmware/keyboards/crkbd/keymaps/*
-      - name: LS
-        run: ls -ls $HOME/qmk_firmware/keyboards/crkbd/keymaps/
-      - name: Remove defaukt crkbd keymaps
-        run: rm -rf $HOME/qmk_firmware/keyboards/crkbd/keymaps/*
-      - name: LS
-        run: ls -ls $HOME/qmk_firmware/keyboards/crkbd/keymaps/
       - name: PWD
         run: echo $PWD
       - name: Compile crkbd keymaps
@@ -42,7 +38,9 @@ jobs:
           do
             dir=${dir%*/}
             echo "${dir##*/}"
-            qmk compile -kb crkbd/rev1/legacy -km ${dir}
+            echo "${dir}"
+            echo $(basename "$dir")
+            qmk compile -kb crkbd/rev1/legacy -km $(basename "$dir")
           done
       - name: LS
         run: ls -la $HOME/qmk_firmware/
