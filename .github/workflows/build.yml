@@ -35,6 +35,6 @@ jobs:
             echo $PWD
             qmk compile -kb crkbd -km ${dir}
           done
-          ls -la $HOME/qmk_firmware/.build/
-          mv $HOME/qmk_firmware/.build/*.hex $(pwd)
+      - name: Move keymaps
+        run: mv $HOME/qmk_firmware/*.hex $(pwd)
 
