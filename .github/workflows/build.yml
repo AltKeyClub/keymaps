@@ -44,4 +44,4 @@ jobs:
           file: $(pwd)/*.hex
           tag: ${{ github.ref }}
           overwrite: true
-
+          file_glob: true
