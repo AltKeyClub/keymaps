@@ -36,9 +36,12 @@ jobs:
             echo "${dir##*/}"
             echo $PWD
             qmk compile -kb crkbd -km ${dir}
+            mv $HOME/qmk_firmware/*.hex $(pwd)
           done
       - name: LS
         run: ls -la $HOME/qmk_firmware/
+      - name: LS
+        run: ls -la /home/runner/work/keymaps/
       - name: LS
         run: ls -la $PWD
       - name: PWD
