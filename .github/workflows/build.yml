@@ -30,18 +30,15 @@ jobs:
         run: echo $PWD
       - name: Compile crkbd keymaps
         run: |
-          for dir in $HOME/qmk_firmware/keyboards/crkbd/keymaps/
+          for dir in $HOME/qmk_firmware/keyboards/crkbd/keymaps/*
           do
             dir=${dir%*/}
             echo "${dir##*/}"
             echo $PWD
             qmk compile -kb crkbd -km ${dir}
-            mv $HOME/qmk_firmware/*.hex $(pwd)
           done
       - name: LS
         run: ls -la $HOME/qmk_firmware/
-      - name: LS
-        run: ls -la /home/runner/work/keymaps/
       - name: LS
         run: ls -la $PWD
       - name: PWD
