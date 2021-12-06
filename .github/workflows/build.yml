@@ -26,6 +26,8 @@ jobs:
         run: git submodule update --init --recursive
       - name: Move crkdb keymaps into qmk
         run: mv $(pwd)/crkbd/* $HOME/qmk_firmware/keyboards/crkbd/keymaps/
+      - name: PWD
+        run: echo $PWD
       - name: Compile crkbd keymaps
         run: |
           for dir in $HOME/qmk_firmware/keyboards/crkbd/keymaps/
@@ -33,8 +35,12 @@ jobs:
             dir=${dir%*/}
             echo "${dir##*/}"
             echo $PWD
-            qmk compile -kb crkbd -km ${dir}
+            qmk compile -kb crkbd -km ${dir} ${PWD}/${dir}.hex
           done
+      - name: PWD
+        run: echo $PWD
       - name: Move keymaps
         run: mv $HOME/qmk_firmware/*.hex $(pwd)
+      - name: PWD
+        run: echo $PWD
 
