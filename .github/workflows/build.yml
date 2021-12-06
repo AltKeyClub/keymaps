@@ -24,30 +24,23 @@ jobs:
           qmk setup --yes
       - name: Checkout submodules
         run: git submodule update --init --recursive
-      - name: Remove defaukt crkbd keymaps
+      - name: Remove default crkbd keymaps
         run: rm -rf $HOME/qmk_firmware/keyboards/crkbd/keymaps/*
-      - name: Move crkdb keymaps 
+      - name: Move crkdb keymaps
         run: mv $(pwd)/crkbd/* $HOME/qmk_firmware/keyboards/crkbd/keymaps/
-      - name: LS
-        run: ls -la $HOME/qmk_firmware/keyboards/crkbd/keymaps/
-      - name: PWD
-        run: echo $PWD
       - name: Compile crkbd keymaps
         run: |
           for dir in $HOME/qmk_firmware/keyboards/crkbd/keymaps/*
           do
             dir=${dir%*/}
-            echo "${dir##*/}"
-            echo "${dir}"
-            echo $(basename "$dir")
-            qmk compile -kb crkbd/rev1/legacy -km $(basename "$dir")
+            qmk compile -kb crkbd -km $(basename "$dir")
           done
-      - name: LS
-        run: ls -la $HOME/qmk_firmware/
-      - name: LS
-        run: ls -la $PWD
-      - name: PWD
-        run: echo $PWD
       - name: Move keymaps
         run: mv $HOME/qmk_firmware/*.hex $(pwd)
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: $(pwd)/*.hex
+          overwrite: true
 
